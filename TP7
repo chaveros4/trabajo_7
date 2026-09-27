@@ -1,0 +1,449 @@
+# A - Actividades teóricas
+
+## 1. ¿Qué es el encapsulamiento? ¿Cuáles son los niveles de acceso a miembros de la clase?
+
+El encapsulamiento es una característica de la programación orientada a objetos que sirve para proteger los datos que tiene una clase. La idea es que esos datos no se puedan modificar directamente desde cualquier parte del programa, sino que se acceda a ellos mediante los métodos de la clase.
+
+En C++ existen tres niveles de acceso:
+
+* **public:** permite acceder a los miembros de la clase desde afuera usando un objeto.
+* **private:** no permite acceder directamente desde afuera de la clase. Los miembros privados solamente pueden ser utilizados directamente dentro de la propia clase. Además, `private` es el nivel que se usa por defecto en una clase.
+* **protected:** permite acceder a los miembros desde la propia clase y también desde las clases que heredan de ella.
+
+En el material se explican principalmente `public` y `private`. Por ejemplo, si un atributo es privado, no podemos modificarlo directamente desde `main`, sino que necesitamos un método público para hacerlo.
+
+---
+
+## 2. ¿Qué son los getters y setters? ¿Cuál es su propósito principal? ¿Cuándo es conveniente usarlos?
+
+Los **getters y setters** son métodos que se usan para trabajar con los atributos privados de una clase.
+
+El **getter** sirve para consultar o devolver el valor de un atributo, mientras que el **setter** sirve para cambiar ese valor.
+
+Se utilizan principalmente para mantener los atributos privados y, al mismo tiempo, poder acceder a ellos de una forma controlada.
+
+Por ejemplo, si tenemos un atributo `edad` privado, podemos usar un `setEdad()` para cambiarlo y un `getEdad()` para obtener su valor.
+
+```cpp
+class Estudiante {
+private:
+    int edad;
+
+public:
+    void setEdad(int nuevaEdad);
+    int getEdad();
+};
+```
+
+Esto permite mantener el encapsulamiento de la clase sin tener que hacer públicos sus atributos.
+
+---
+
+## 3. ¿Cuál es la diferencia entre un constructor y un destructor? ¿Cuándo se ejecutan cada uno?
+
+El **constructor** es un método especial que se ejecuta automáticamente cuando creamos un objeto. Se utiliza principalmente para inicializar los atributos de ese objeto.
+
+El **destructor** también es un método especial, pero se ejecuta cuando el objeto deja de existir. Su nombre es igual al de la clase, pero lleva un `~` adelante.
+
+La diferencia principal es:
+
+* El constructor se ejecuta cuando se crea el objeto.
+* El destructor se ejecuta cuando termina la vida del objeto.
+* El constructor sirve principalmente para inicializar los datos.
+* El destructor sirve para realizar las acciones finales antes de que el objeto sea eliminado.
+
+Además, ninguno de los dos devuelve un valor.
+
+---
+
+## 4. Cuadro comparativo entre constructores y destructores
+
+| Característica    | Constructor                                     | Destructor                                |
+| ----------------- | ----------------------------------------------- | ----------------------------------------- |
+| Función           | Inicializa el objeto                            | Realiza las acciones finales del objeto   |
+| Cuándo se ejecuta | Al crear el objeto                              | Cuando el objeto se elimina               |
+| Ejecución         | Automática                                      | Automática                                |
+| Nombre            | Igual al nombre de la clase                     | Igual al nombre de la clase, pero con `~` |
+| Retorno           | No devuelve datos                               | No devuelve datos                         |
+| Parámetros        | Puede recibir parámetros                        | No recibe parámetros                      |
+| Uso               | Inicializar atributos                           | Finalizar las acciones del objeto         |
+| Obligatorio       | Se puede definir según lo que necesite la clase | No es obligatorio                         |
+| Ejemplo           | `Tabla();`                                      | `~Tabla();`                               |
+
+El material explica que el constructor es el primer método que se ejecuta al crear un objeto, mientras que el destructor es el último y se ejecuta automáticamente.
+
+---
+
+## 5. Diferencia entre definir una función miembro dentro o fuera de la clase
+
+Una función miembro se puede escribir directamente dentro de la clase, o se puede declarar dentro de la clase y después escribir su contenido afuera usando `::`.
+
+### Cuadro comparativo
+
+| Característica  | Dentro de la clase                                          | Fuera de la clase                                                                  |
+| --------------- | ----------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| Ubicación       | Se escribe todo dentro de la clase                          | Se declara dentro y se desarrolla afuera                                           |
+| Ejemplo         | `void mostrar() { ... }`                                    | `void mostrar();` y después `void Clase::mostrar() { ... }`                        |
+| Uso de `::`     | No hace falta                                               | Sí, se usa para indicar a qué clase pertenece                                      |
+| Organización    | Es más simple para funciones cortas                         | Deja la clase más ordenada                                                         |
+| Ventaja         | Es fácil y rápido de escribir                               | Es más cómodo cuando las funciones son largas                                      |
+| Desventaja      | La clase puede quedar muy cargada si tiene muchas funciones | Hay que escribir la declaración y después la definición                            |
+| Cuándo conviene | Para funciones pequeñas                                     | Para funciones más grandes o cuando queremos separar la clase de su implementación |
+
+Cuando una función se define dentro de la clase, el compilador la considera automáticamente `inline`. Si solamente se declara dentro y se define afuera, es una función miembro normal. Esto no cambia lo que hace la función, sino que puede influir en las optimizaciones que haga el compilador.
+
+Por ejemplo, dentro de la clase:
+
+```cpp
+class Persona {
+public:
+    void mostrar() {
+        cout << "Hola";
+    }
+};
+```
+
+Y afuera:
+
+```cpp
+class Persona {
+public:
+    void mostrar();
+};
+
+void Persona::mostrar() {
+    cout << "Hola";
+}
+```
+
+---
+
+# B - Actividades del TP Nº7
+
+## 1. Clase Alumno
+
+La clase `Alumno` tiene dos atributos: `nombre` y `edad`. Los datos se cargan directamente en el constructor y después se muestran mediante otros métodos.
+
+```cpp
+#include <iostream>
+using namespace std;
+
+class Alumno {
+private:
+    string nombre;
+    int edad;
+
+public:
+    Alumno();
+
+    void imprimir();
+    void mayorEdad();
+};
+
+Alumno::Alumno() {
+    cout << "Ingrese el nombre del alumno: ";
+    cin >> nombre;
+
+    cout << "Ingrese la edad: ";
+    cin >> edad;
+}
+
+void Alumno::imprimir() {
+    cout << "Nombre: " << nombre << endl;
+    cout << "Edad: " << edad << endl;
+}
+
+void Alumno::mayorEdad() {
+    if (edad >= 18) {
+        cout << "El alumno es mayor de edad." << endl;
+    } else {
+        cout << "El alumno es menor de edad." << endl;
+    }
+}
+
+int main() {
+    Alumno alumno1;
+
+    alumno1.imprimir();
+    alumno1.mayorEdad();
+
+    return 0;
+}
+```
+
+Cuando se crea `alumno1`, el constructor se ejecuta automáticamente y pide el nombre y la edad. Después se llaman los métodos para mostrar los datos y comprobar si es mayor de edad. La actividad pide justamente realizar la carga desde el constructor.
+
+---
+
+## 2. Clase Empleado
+
+En este ejercicio se crea una clase `Empleado` con su nombre y sueldo. El constructor pide esos datos y después se utilizan métodos para mostrarlos y comprobar si tiene que pagar impuestos.
+
+```cpp
+#include <iostream>
+using namespace std;
+
+class Empleado {
+private:
+    string nombre;
+    float sueldo;
+
+public:
+    Empleado();
+
+    void imprimir();
+    void pagarImpuestos();
+};
+
+Empleado::Empleado() {
+    cout << "Ingrese el nombre del empleado: ";
+    cin >> nombre;
+
+    cout << "Ingrese el sueldo: ";
+    cin >> sueldo;
+}
+
+void Empleado::imprimir() {
+    cout << "Nombre: " << nombre << endl;
+    cout << "Sueldo: " << sueldo << endl;
+}
+
+void Empleado::pagarImpuestos() {
+    if (sueldo > 3000) {
+        cout << "El empleado debe pagar impuestos." << endl;
+    } else {
+        cout << "El empleado no debe pagar impuestos." << endl;
+    }
+}
+
+int main() {
+    Empleado empleado1;
+
+    empleado1.imprimir();
+    empleado1.pagarImpuestos();
+
+    return 0;
+}
+```
+
+La condición es que si el sueldo supera los `3000`, se muestra que el empleado debe pagar impuestos.
+
+---
+
+## 3. Clase Operaciones
+
+La clase `Operaciones` recibe dos números enteros en el constructor. Después se utilizan esos números para hacer la suma, resta, multiplicación y división.
+
+```cpp
+#include <iostream>
+using namespace std;
+
+class Operaciones {
+private:
+    int num1;
+    int num2;
+
+public:
+    Operaciones(int n1, int n2);
+
+    void suma();
+    void resta();
+    void multiplicacion();
+    void division();
+};
+
+Operaciones::Operaciones(int n1, int n2) {
+    num1 = n1;
+    num2 = n2;
+}
+
+void Operaciones::suma() {
+    cout << "Suma: " << num1 + num2 << endl;
+}
+
+void Operaciones::resta() {
+    cout << "Resta: " << num1 - num2 << endl;
+}
+
+void Operaciones::multiplicacion() {
+    cout << "Multiplicacion: " << num1 * num2 << endl;
+}
+
+void Operaciones::division() {
+    if (num2 != 0) {
+        cout << "Division: " << num1 / num2 << endl;
+    } else {
+        cout << "No se puede dividir por cero." << endl;
+    }
+}
+
+int main() {
+    int a, b;
+
+    cout << "Ingrese el primer numero: ";
+    cin >> a;
+
+    cout << "Ingrese el segundo numero: ";
+    cin >> b;
+
+    Operaciones op(a, b);
+
+    op.suma();
+    op.resta();
+    op.multiplicacion();
+    op.division();
+
+    return 0;
+}
+```
+
+Los dos números se pasan al constructor y quedan guardados en los atributos `num1` y `num2`. Después cada método utiliza esos valores para hacer la operación correspondiente.
+
+---
+
+## 4. Clase Sumatoria
+
+En esta actividad se ingresan números enteros hasta que se introduce un `0`. La suma se va guardando y, cuando termina el programa, el destructor muestra el resultado.
+
+```cpp
+#include <iostream>
+using namespace std;
+
+class Sumatoria {
+private:
+    int suma;
+
+public:
+    Sumatoria();
+
+    void cargar();
+
+    ~Sumatoria();
+};
+
+Sumatoria::Sumatoria() {
+    suma = 0;
+}
+
+void Sumatoria::cargar() {
+    int valor;
+
+    cout << "Ingrese un valor entero (0 para finalizar): ";
+    cin >> valor;
+
+    while (valor != 0) {
+        suma = suma + valor;
+
+        cout << "Ingrese un valor entero (0 para finalizar): ";
+        cin >> valor;
+    }
+}
+
+Sumatoria::~Sumatoria() {
+    cout << "La suma de los valores ingresados es: " << suma << endl;
+}
+
+int main() {
+    Sumatoria sum;
+
+    sum.cargar();
+
+    return 0;
+}
+```
+
+Cuando se llega al final de `main`, el objeto `sum` termina su vida y se ejecuta automáticamente el destructor. En ese momento se muestra la suma que se fue acumulando. La actividad pide justamente mostrar la suma desde el destructor.
+
+---
+
+## 5. Clase Estudiante con getters y setters
+
+En este ejercicio la clase `Estudiante` tiene tres atributos: `nombre`, `edad` y `calificación`. Los atributos son privados, por lo que para modificarlos se utilizan setters y para obtener sus valores se utilizan getters.
+
+```cpp
+#include <iostream>
+using namespace std;
+
+class Estudiante {
+private:
+    string nombre;
+    int edad;
+    float calificacion;
+
+public:
+    void setNombre(string nuevoNombre);
+    string getNombre();
+
+    void setEdad(int nuevaEdad);
+    int getEdad();
+
+    void setCalificacion(float nuevaCalificacion);
+    float getCalificacion();
+};
+
+void Estudiante::setNombre(string nuevoNombre) {
+    nombre = nuevoNombre;
+}
+
+string Estudiante::getNombre() {
+    return nombre;
+}
+
+void Estudiante::setEdad(int nuevaEdad) {
+    edad = nuevaEdad;
+}
+
+int Estudiante::getEdad() {
+    return edad;
+}
+
+void Estudiante::setCalificacion(float nuevaCalificacion) {
+    calificacion = nuevaCalificacion;
+}
+
+float Estudiante::getCalificacion() {
+    return calificacion;
+}
+
+int main() {
+    Estudiante estudiante1;
+
+    estudiante1.setNombre("Ramiro");
+    estudiante1.setEdad(17);
+    estudiante1.setCalificacion(8.5);
+
+    cout << "Nombre: " << estudiante1.getNombre() << endl;
+    cout << "Edad: " << estudiante1.getEdad() << endl;
+    cout << "Calificacion: " << estudiante1.getCalificacion() << endl;
+
+    return 0;
+}
+```
+
+Acá los atributos siguen siendo privados. Los `set` se encargan de cambiar sus valores y los `get` de devolverlos. De esta manera se mantiene el encapsulamiento.
+
+---
+
+# Análisis general del código
+
+En el material se puede ver que una clase sirve para juntar atributos y métodos que están relacionados. Los atributos representan los datos o el estado del objeto, mientras que los métodos permiten trabajar con esos datos.
+
+También se usa bastante la separación entre la declaración y la definición de los métodos. Primero se indica el método dentro de la clase y después se escribe su código afuera utilizando `::`.
+
+Por ejemplo:
+
+```cpp
+void MiClase::cambiarVar1(int a)
+```
+
+El `::` sirve para indicar que `cambiarVar1` pertenece a `MiClase`.
+
+Otra cosa importante es el encapsulamiento. Los atributos se mantienen privados y se utilizan métodos públicos para trabajar con ellos. Por eso, si intentamos modificar directamente un atributo privado, como:
+
+```cpp
+obj.var1 = 200;
+```
+
+el programa da un error.
+
+Por último, los ejem
